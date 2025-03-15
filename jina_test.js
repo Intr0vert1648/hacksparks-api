@@ -1,6 +1,7 @@
 import https from 'https';
+import fs from 'fs';
 
-const userInput = "https://github.com/maazshaikh2079/HackSpark-Topics/blob/main/HackSpark-Topics.pdf"
+const userInput = "https://drive.google.com/file/d/1iELQworLYVjSZvyZN8oxRg33HZWNNdlt/view?usp=sharing"
 const postData = JSON.stringify({
   url: userInput
 });
@@ -17,11 +18,20 @@ const options = {
   }
 };
 
+const fileName = `mds/response_${Date.now()}.md`;
 const req = https.request(options, (res) => {
   let data = '';
 
   res.on('data', (chunk) => {
     data += chunk;
+    fs.writeFile(fileName,data, (err) =>
+    {
+      if (err) {
+        console.error('Error writing file:', err);
+    } else {
+        console.log(`Data saved to ${fileName}`);
+    }
+  });
   });
 
   res.on('end', () => {
